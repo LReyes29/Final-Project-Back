@@ -173,14 +173,30 @@ def users(id=None):
         fullname = request.json.get('fullname', None)
         email = request.json.get('email', None)
         password = request.json.get('password', None)
+        repeated_pass = request.json.get('repeated_pass', None)
         #meetings = request.json.get('meetings', None)
 
         if not fullname:
-            return jsonify({"msg": "fullname is required"}), 422
+            return jsonify({
+                "status": "Alerta",
+                "msg": "El nombre completo es requerido"}), 422
         if not email:
-            return jsonify({"msg": "email is required"}), 422  
+            return jsonify({
+                "status": "Alerta",
+                "msg": "El email es requerido"}), 422  
         if not password:
-            return jsonify({"msg": "password is required"}), 422 
+            return jsonify({
+                "status": "Alerta",
+                "msg": "La contraseña es requerida"}), 422 
+        if not repeated_pass:
+            return jsonify({
+                "status": "Alerta",
+                "msg": "La verificación de la contraseña es requerida"}), 422 
+        if password != repeated_pass:
+            return jsonify({
+                "status": "Alerta",
+                "msg": "Las contraseñas no coinciden"
+            }),401  
              
         user = User.query.get(id)
 
@@ -193,7 +209,15 @@ def users(id=None):
 
         db.session.commit()
 
-        return jsonify(user.serialize()), 200
+        objeto = {
+                "status": "Success",
+                "msg": "Edicion de perfil correcta"
+            }
+
+        usuario = user.serialize()
+        respuesta = {**objeto, **usuario}
+
+        return jsonify(respuesta), 201
 
     if request.method =='DELETE':
         user = User.query.get(id)
