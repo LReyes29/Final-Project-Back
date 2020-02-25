@@ -132,28 +132,29 @@ def users(id=None):
             if validate:
                 return jsonify({
                     "status": "Alerta",
-                    "msg": "Mail Ya en uso"}), 401 
+                    "msg": "Ya existe un usuario registrado con este email"}), 401 
         if not fullname:
             return jsonify({
                 "status": "Alerta",
-                "msg": "El nombre es requerido"}), 422
+                "msg": "El nombre completo es requerido"}), 422
         if not email:
             return jsonify({
                 "status": "Alerta",
-                "msg": "email es requerido"}), 422  
+                "msg": "El email es requerido"}), 422  
         if not password:
             return jsonify({
                 "status": "Alerta",
-                "msg": "contraseña es requerida"}), 422 
+                "msg": "La contraseña es requerida"}), 422 
         if not repeated_pass:
             return jsonify({
                 "status": "Alerta",
-                "msg": "segunda contraseña es requerida"}), 422 
+                "msg": "La verificación de la contraseña es requerida"}), 422 
         if password != repeated_pass:
             return jsonify({
                 "status": "Alerta",
-                "msg": "Las contraseñas no coinciden"
+                "msg": "Las contraseñas ingresadas no coinciden"
             }),401
+            
         user = User()
         user.fullname = fullname
         user.email = email
@@ -195,7 +196,7 @@ def users(id=None):
         if password != repeated_pass:
             return jsonify({
                 "status": "Alerta",
-                "msg": "Las contraseñas no coinciden"
+                "msg": "Las contraseñas ingresadas no coinciden"
             }),401  
              
         user = User.query.get(id)
@@ -233,26 +234,28 @@ def users(id=None):
 
 @app.route("/user/login", methods=['POST'])
 def login():
+
     email = request.json.get('email', None)
     password = request.json.get('password', None)
+
     if request.method =='POST':
         if not email:
             return jsonify({
                 "status": "Alerta",
-                "msg": "Email es requerido"}), 401
+                "msg": "El email es requerido"}), 401
         if not password:
             return jsonify({
                 "status": "Alerta", 
-                "msg": "Contraseña es requerida"}), 401
+                "msg": "La contraseña es requerida"}), 401
         user = User.query.filter_by(email=email).first()
         if not user:
             return jsonify({
                 "status": "Alerta",
-                "msg": "El usuario no existe"}), 404
+                "msg": "El usuario ingresado no existe"}), 404
         if password != user.password:
             return jsonify({
                 "status": "Alerta",
-                "msg": "Contraseña incorrecta"}), 401
+                "msg": "La contraseña ingresada es incorrecta"}), 401
         if password == user.password:
             objeto = {
                 "status": "Success",
