@@ -202,7 +202,10 @@ def users(id=None):
         user = User.query.get(id)
 
         if not user:                
-                return jsonify({"msg":"user not found"}), 404
+                return jsonify({
+                "status": "Alerta",
+                "msg":"user not found"
+            }), 404
 
         user.fullname = fullname
         user.email = email
