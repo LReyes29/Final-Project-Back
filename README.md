@@ -36,3 +36,5 @@ $ pipenv python app.py db upgrade
 ```
 $ pipenv python app.py runserver
 ```
+## License
+[MIT](https://choosealicense.com/licenses/agpl-3.0/)
